@@ -5,12 +5,13 @@ import 'leaflet/dist/leaflet.css'
 import './styles/global.css'
 import './styles/components.css'
 import App from './App.jsx'
+import ErrorBoundary from './components/common/ErrorBoundary.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
-      <App />
+      <ErrorBoundary><App /></ErrorBoundary>
     </AuthProvider>
   </BrowserRouter>,
 )

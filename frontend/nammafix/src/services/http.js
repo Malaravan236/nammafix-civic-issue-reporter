@@ -1,5 +1,4 @@
-
-const BASE = import.meta.env.VITE_API;
+const BASE = import.meta.env.VITE_API ?? '';
 
 export const tokens = {
   get access() {
@@ -87,12 +86,23 @@ export async function http(path, opts = {}) {
     }
   }
 
-  const data = await res.json().catch(() => ({}));
+  const text = await res.text();
+  let data = null;
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    data = null;
+  }
+
+  if (res.ok && data === null) {
+    throw new Error(
+      'The server did not return JSON. Check VITE_API in .env and make sure the backend is running.'
+    );
+  }
+  if (data === null) data = {};
 
   if (res.status === 429) {
-    throw new Error(
-      'Too many requests. Wait a minute and try again.'
-    );
+    throw new Error('Too many requests. Wait a minute and try again.');
   }
 
   if (!res.ok) {

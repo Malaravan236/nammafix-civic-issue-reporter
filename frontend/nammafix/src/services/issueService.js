@@ -1,15 +1,15 @@
 import { http } from './http';
 
+// Always return a real array, whatever the server sends
+const unwrap = (d) => (Array.isArray(d) ? d : Array.isArray(d?.results) ? d.results : []);
+
 const post = (path, body) =>
   http(path, { method: 'POST', body });
 
 export const listIssues = (params = {}) => {
   const clean = Object.fromEntries(
-    Object.entries(params).filter(
-      ([, v]) => v !== '' && v != null
-    )
+    Object.entries(params).filter(([, v]) => v !== '' && v != null)
   );
-
   return http('/api/issues/?' + new URLSearchParams(clean));
 };
 
@@ -28,11 +28,10 @@ export const unsupportIssue = (id) =>
 export const addComment = (id, text) =>
   post(`/api/issues/${id}/comments/`, { text });
 
-export const myReports = () =>
-  http('/api/issues/my_reports/');
+export const myReports = async () => unwrap(await http('/api/issues/my_reports/'));
 
-export const nearbyIssues = (lat, lon, radius = 2) =>
-  http(`/api/issues/nearby/?lat=${lat}&lon=${lon}&radius=${radius}`);
+export const nearbyIssues = async (lat, lon, radius = 2) =>
+  unwrap(await http(`/api/issues/nearby/?lat=${lat}&lon=${lon}&radius=${radius}`));
 
 export const analytics = () =>
   http('/api/issues/analytics/');
@@ -41,13 +40,19 @@ export const resolveIssue = (id, status, remarks) =>
   post(`/api/issues/${id}/resolve/`, { status, remarks });
 
 export const deleteIssue = (id) =>
-  http(`/api/issues/${id}/`, {
-    method: 'DELETE',
-  });
-export const adminUsers = () => http('/api/admin-users/');
-export const setUserActive = (id, is_active) => http(`/api/admin-users/${id}/`, { method: 'PATCH', body: { is_active } });
-export const notifications = () => http('/api/notifications/');
+  http(`/api/issues/${id}/`, { method: 'DELETE' });
+
+export const adminUsers = async () => unwrap(await http('/api/admin-users/'));
+
+export const setUserActive = (id, is_active) =>
+  http(`/api/admin-users/${id}/`, { method: 'PATCH', body: { is_active } });
+
+export const notifications = async () => unwrap(await http('/api/notifications/'));
+
 export const markAllRead = () => post('/api/notifications/');
+
 export const getProfile = () => http('/api/profile/');
+
 export const saveProfile = (body) => http('/api/profile/', { method: 'PUT', body });
+
 export const adminStats = () => http('/api/admin-stats/');

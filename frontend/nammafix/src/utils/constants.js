@@ -3,4 +3,5 @@ export const CATEGORY_ICONS = { pothole: '🛣', water: '💧', garbage: '🗑',
 export const STATUSES = { open: 'Open', in_progress: 'In Progress', resolved: 'Resolved', duplicate: 'Duplicate', rejected: 'Rejected' }
 export const STATUS_COLORS = { open: '#e5484d', in_progress: '#f5a524', resolved: '#16a362', duplicate: '#6b7280', rejected: '#9a3412' }
 export const DEFAULT_CENTER = [11.0168, 76.9558]
-export const list = (d) => (Array.isArray(d) ? d : d?.results || [])
+
+export const list = (d) => (Array.isArray(d) ? d : Array.isArray(d?.results) ? d.results : [])

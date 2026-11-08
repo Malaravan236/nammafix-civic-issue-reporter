@@ -1,0 +1,17 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+db.sqlite3
+
+# Uploads (users' photos)
+backend/media/
+
+# Node
+node_modules/
+dist/
+
+# Secrets
+.env
+.env.*
+*.pem

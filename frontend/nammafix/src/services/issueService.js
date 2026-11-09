@@ -1,10 +1,10 @@
 import { http } from './http';
 
 // Always return a real array, whatever the server sends
-const unwrap = (d) => (Array.isArray(d) ? d : Array.isArray(d?.results) ? d.results : []);
+const unwrap = (d) =>
+  Array.isArray(d) ? d : Array.isArray(d?.results) ? d.results : [];
 
-const post = (path, body) =>
-  http(path, { method: 'POST', body });
+const post = (path, body) => http(path, { method: 'POST', body });
 
 export const listIssues = (params = {}) => {
   const clean = Object.fromEntries(
@@ -13,28 +13,24 @@ export const listIssues = (params = {}) => {
   return http('/api/issues/?' + new URLSearchParams(clean));
 };
 
-export const getIssue = (id) =>
-  http(`/api/issues/${id}/`);
+export const getIssue = (id) => http(`/api/issues/${id}/`);
 
-export const createIssue = (formData) =>
-  post('/api/issues/', formData);
+export const createIssue = (formData) => post('/api/issues/', formData);
 
-export const supportIssue = (id) =>
-  post(`/api/issues/${id}/support/`);
+export const supportIssue = (id) => post(`/api/issues/${id}/support/`);
 
-export const unsupportIssue = (id) =>
-  post(`/api/issues/${id}/unsupport/`);
+export const unsupportIssue = (id) => post(`/api/issues/${id}/unsupport/`);
 
 export const addComment = (id, text) =>
   post(`/api/issues/${id}/comments/`, { text });
 
-export const myReports = async () => unwrap(await http('/api/issues/my_reports/'));
+export const myReports = async () =>
+  unwrap(await http('/api/issues/my_reports/'));
 
 export const nearbyIssues = async (lat, lon, radius = 2) =>
   unwrap(await http(`/api/issues/nearby/?lat=${lat}&lon=${lon}&radius=${radius}`));
 
-export const analytics = () =>
-  http('/api/issues/analytics/');
+export const analytics = () => http('/api/issues/analytics/');
 
 export const resolveIssue = (id, status, remarks) =>
   post(`/api/issues/${id}/resolve/`, { status, remarks });
@@ -47,12 +43,14 @@ export const adminUsers = async () => unwrap(await http('/api/admin-users/'));
 export const setUserActive = (id, is_active) =>
   http(`/api/admin-users/${id}/`, { method: 'PATCH', body: { is_active } });
 
-export const notifications = async () => unwrap(await http('/api/notifications/'));
+export const notifications = async () =>
+  unwrap(await http('/api/notifications/'));
 
 export const markAllRead = () => post('/api/notifications/');
 
 export const getProfile = () => http('/api/profile/');
 
-export const saveProfile = (body) => http('/api/profile/', { method: 'PUT', body });
+export const saveProfile = (body) =>
+  http('/api/profile/', { method: 'PUT', body });
 
 export const adminStats = () => http('/api/admin-stats/');
